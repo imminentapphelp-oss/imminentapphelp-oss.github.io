@@ -66,7 +66,12 @@
   </section>
 </main>
 
+<script src="ics.js"></script>
 <script>
+// Add to Calendar goes through a service worker (sw.js), which hands Safari the calendar file as if
+// it came from the website; Safari on iPhone ignores calendar files a page builds itself.
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+
 // The countdown, read from after the # (never sent to the server):
 //   t   title             e   emoji
 //   s   start: 20261111T202000Z (timed, UTC) or 20261225 (all-day)
@@ -101,9 +106,22 @@
 
   const addButton = document.getElementById("add");
   if (countsUp && start.date <= new Date()) addButton.hidden = true;
-  addButton.addEventListener("click", () => {
-    // Safari opens a calendar file as Calendar's own "Add" sheet.
-    location.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(calendarFile());
+  addButton.addEventListener("click", async () => {
+    const fields = eventFields();
+    // The service worker answers event.ics in the browser, so these details never reach the website.
+    // It's installed when the page first loads; give it a moment if it isn't running yet.
+    if ("serviceWorker" in navigator && !navigator.serviceWorker.controller) {
+      await Promise.race([
+        new Promise(resolve => navigator.serviceWorker.addEventListener("controllerchange", resolve, { once: true })),
+        new Promise(resolve => setTimeout(resolve, 2000)),
+      ]);
+    }
+    if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+      location.href = "event.ics?" + new URLSearchParams(fields).toString();
+    } else {
+      // No service worker (rare): try the file directly. Desktop browsers download it.
+      location.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(imminentCalendarFile(fields));
+    }
   });
 
   update();
@@ -222,30 +240,22 @@
     document.getElementById("when").textContent = whenText(now);
   }
 
-  // An .ics for the next time it happens (repeating ones keep repeating).
-  function calendarFile() {
+  // The event for the next time it happens (repeating ones keep repeating), for ics.js.
+  function eventFields() {
     const target = currentTarget(new Date());
     const pad = n => String(n).padStart(2, "0");
     const day = d => d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
     const utc = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-    const escape = s => s.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
-    const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Imminent//Countdowns//EN", "CALSCALE:GREGORIAN",
-      "METHOD:PUBLISH", "BEGIN:VEVENT",
-      "UID:" + (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())) + "@imminent",
-      "DTSTAMP:" + utc(new Date())];
+    const fields = { t: title };
     if (allDay) {
-      lines.push("DTSTART;VALUE=DATE:" + day(target), "DTEND;VALUE=DATE:" + day(finishOf(target)));
+      fields.s = day(target);
+      fields.end = day(finishOf(target));
     } else {
-      lines.push("DTSTART:" + utc(target), "DTEND:" + utc(finishOf(target)));
+      fields.s = utc(target);
+      fields.end = utc(finishOf(target));
     }
-    if (repeat) {
-      const freq = { D: "DAILY", W: "WEEKLY", M: "MONTHLY", Y: "YEARLY" }[repeat[1]];
-      lines.push("RRULE:FREQ=" + freq + ";INTERVAL=" + repeat[2]);
-    }
-    lines.push("SUMMARY:" + escape(title),
-      "DESCRIPTION:" + escape("Count down to it with Imminent: https://apps.apple.com/app/id6830674834"),
-      "END:VEVENT", "END:VCALENDAR");
-    return lines.join("\r\n") + "\r\n";
+    if (repeat) fields.r = repeat[1] + repeat[2];
+    return fields;
   }
 })();
 </script>
