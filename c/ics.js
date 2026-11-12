@@ -1,5 +1,4 @@
-// Builds the calendar file (.ics) for a shared countdown. Used by the page (index.html) and by
-// its service worker (sw.js), which hands the file to Safari as if it came from the website.
+// Builds the calendar file (.ics) for a shared countdown, used by the page (index.html).
 //
 // The event is described by these fields (all strings):
 //   t   title

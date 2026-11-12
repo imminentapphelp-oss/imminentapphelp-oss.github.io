@@ -37,6 +37,7 @@
     border-radius: 14px; font-weight: 600; font-size: 17px; text-decoration: none; border: 0; cursor: pointer; }
   .primary { background: var(--accent); color: #fff; }
   .secondary { background: var(--button); color: var(--fg); box-shadow: 0 1px 6px rgba(0,0,0,.08); }
+  .tip { color: var(--muted); font-size: 14px; text-align: center; margin: -2px 8px 4px; }
   .note { color: var(--muted); font-size: 14px; text-align: center; margin-top: 18px; }
   .note a { color: var(--accent); }
   [hidden] { display: none !important; }
@@ -53,6 +54,9 @@
     </div>
     <div class="actions">
       <button class="button primary" id="add" type="button">Add to Calendar</button>
+      <p class="tip" id="safari-tip" hidden>This browser can't add events to Apple Calendar.
+        To add it there, open this page in Safari.</p>
+      <a class="button secondary" id="google" hidden target="_blank" rel="noopener">Add to Google Calendar</a>
       <a class="button secondary" href="https://apps.apple.com/app/id6830674834">Count down with Imminent</a>
     </div>
     <p class="note">Imminent keeps the events you're looking forward to front and center, on your Home Screen,
@@ -68,9 +72,11 @@
 
 <script src="ics.js"></script>
 <script>
-// Add to Calendar goes through a service worker (sw.js), which hands Safari the calendar file as if
-// it came from the website; Safari on iPhone ignores calendar files a page builds itself.
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+// An earlier version of this page installed a service worker (sw.js) for Add to Calendar; on a real
+// iPhone, Calendar fetched the file again from the website and got a 404. Remove it where installed.
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then(all => all.forEach(r => r.unregister())).catch(() => {});
+}
 
 // The countdown, read from after the # (never sent to the server):
 //   t   title             e   emoji
@@ -106,23 +112,26 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catc
 
   const addButton = document.getElementById("add");
   if (countsUp && start.date <= new Date()) addButton.hidden = true;
-  addButton.addEventListener("click", async () => {
-    const fields = eventFields();
-    // The service worker answers event.ics in the browser, so these details never reach the website.
-    // It's installed when the page first loads; give it a moment if it isn't running yet.
-    if ("serviceWorker" in navigator && !navigator.serviceWorker.controller) {
-      await Promise.race([
-        new Promise(resolve => navigator.serviceWorker.addEventListener("controllerchange", resolve, { once: true })),
-        new Promise(resolve => setTimeout(resolve, 2000)),
-      ]);
-    }
-    if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
-      location.href = "event.ics?" + new URLSearchParams(fields).toString();
-    } else {
-      // No service worker (rare): try the file directly. Desktop browsers download it.
-      location.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(imminentCalendarFile(fields));
-    }
+  addButton.addEventListener("click", () => {
+    // The calendar file is made right here in the page (a blob), so the details never reach the
+    // website. Safari hands it to Calendar's Add screen; desktop browsers download it.
+    const file = new Blob([imminentCalendarFile(eventFields())], { type: "text/calendar" });
+    location.href = URL.createObjectURL(file);
   });
+
+  // Other browsers on iPhone (Chrome, Firefox, Edge…) only download the calendar file; Calendar never
+  // sees it. There, suggest Safari and offer Google Calendar too (also on Android). The Google button
+  // sends this event's details to Google, but only if the visitor taps it.
+  const ua = navigator.userAgent;
+  const iPhone = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const otherBrowser = /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|GSA\/|DuckDuckGo|Brave/.test(ua);
+  if (!addButton.hidden && ((iPhone && otherBrowser) || /Android/.test(ua))) {
+    if (iPhone) document.getElementById("safari-tip").hidden = false;
+    const google = document.getElementById("google");
+    google.hidden = false;
+    google.addEventListener("click", () => { google.href = googleCalendarLink(); });
+    google.href = googleCalendarLink();
+  }
 
   update();
   setInterval(update, 1000);
@@ -256,6 +265,22 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catc
     }
     if (repeat) fields.r = repeat[1] + repeat[2];
     return fields;
+  }
+
+  // Google Calendar's "add an event" page, filled in.
+  function googleCalendarLink() {
+    const fields = eventFields();
+    const query = new URLSearchParams({
+      action: "TEMPLATE",
+      text: fields.t,
+      dates: fields.s + "/" + fields.end,
+      details: "Count down to it with Imminent: https://apps.apple.com/app/id6830674834",
+    });
+    if (fields.r) {
+      const freq = { D: "DAILY", W: "WEEKLY", M: "MONTHLY", Y: "YEARLY" }[fields.r[0]];
+      query.set("recur", "RRULE:FREQ=" + freq + ";INTERVAL=" + fields.r.slice(1));
+    }
+    return "https://calendar.google.com/calendar/render?" + query;
   }
 })();
 </script>
