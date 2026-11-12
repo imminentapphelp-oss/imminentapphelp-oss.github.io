@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Calendar Test</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 17px -apple-system, system-ui, sans-serif; margin: 0; padding: 24px 16px; background: Canvas; color: CanvasText; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  p { color: GrayText; margin: 0 0 20px; }
+  button { display: block; width: 100%; padding: 14px; margin: 0 0 6px; font: inherit; font-weight: 600;
+           border: 0; border-radius: 12px; background: #3478F6; color: white; }
+  .hint { font-size: 14px; margin: 0 0 18px; }
+  #status { font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>Add to Calendar test</h1>
+<p>Tap each button. After each one, note whether Calendar's Add screen appears, then come back here.</p>
+
+<button id="a">A · Helper (current)</button>
+<div class="hint">What the page does now</div>
+<button id="b">B · Blob, open</button>
+<div class="hint">File made in the page, opened directly</div>
+<button id="c">C · Blob, download link</button>
+<div class="hint">File made in the page, as a download</div>
+<button id="d">D · Data, download link</button>
+<div class="hint">File written into the link itself</div>
+
+<p id="status"></p>
+
+<script src="ics.js"></script>
+<script>
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+
+// A sample event: tomorrow at noon (UTC), one hour.
+function fields(letter) {
+  const fmt = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const start = new Date(); start.setUTCDate(start.getUTCDate() + 1); start.setUTCHours(17, 0, 0, 0);
+  const end = new Date(start.getTime() + 3600000);
+  return { t: "Imminent test " + letter, s: fmt(start), end: fmt(end) };
+}
+const file = letter => imminentCalendarFile(fields(letter));
+const blobURL = letter => URL.createObjectURL(new Blob([file(letter)], { type: "text/calendar" }));
+function clickLink(href) {
+  const link = document.createElement("a");
+  link.href = href;
+  link.download = "event.ics";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+document.getElementById("a").onclick = () => {
+  if (!navigator.serviceWorker || !navigator.serviceWorker.controller) { alert("Helper not running yet. Reload and try again."); return; }
+  location.href = "event.ics?" + new URLSearchParams(fields("A"));
+};
+document.getElementById("b").onclick = () => { location.href = blobURL("B"); };
+document.getElementById("c").onclick = () => clickLink(blobURL("C"));
+document.getElementById("d").onclick = () => clickLink("data:text/calendar;charset=utf-8," + encodeURIComponent(file("D")));
+
+setInterval(() => {
+  document.getElementById("status").textContent =
+    "Helper: " + (navigator.serviceWorker && navigator.serviceWorker.controller ? "running" : "not running");
+}, 500);
+</script>
+</body>
+</html>
