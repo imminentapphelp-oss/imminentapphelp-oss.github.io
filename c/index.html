@@ -54,6 +54,7 @@
     </div>
     <div class="actions">
       <button class="button primary" id="add" type="button">Add to Calendar</button>
+      <p class="tip" id="sheet-tip" hidden>Then tap <b>Add To Calendar</b> at the bottom of the next screen.</p>
       <p class="tip" id="safari-tip" hidden>This browser can't add events to Apple Calendar.
         To add it there, open this page in Safari.</p>
       <a class="button secondary" id="google" hidden target="_blank" rel="noopener">Add to Google Calendar</a>
@@ -125,6 +126,9 @@ if ("serviceWorker" in navigator) {
   const ua = navigator.userAgent;
   const iPhone = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const otherBrowser = /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|GSA\/|DuckDuckGo|Brave/.test(ua);
+  // In Safari, Calendar's sheet has a checkmark at the top that closes it without adding the event;
+  // the button that adds it is at the bottom.
+  if (!addButton.hidden && iPhone && !otherBrowser) document.getElementById("sheet-tip").hidden = false;
   if (!addButton.hidden && ((iPhone && otherBrowser) || /Android/.test(ua))) {
     if (iPhone) document.getElementById("safari-tip").hidden = false;
     const google = document.getElementById("google");
