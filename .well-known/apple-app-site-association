@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["LNVU8G4323.me.Rupp.Eric.Imminent"],
+        "components": [
+          { "/": "/c/*", "comment": "Shared countdowns open in Imminent when it's installed" }
+        ]
+      }
+    ]
+  }
+}
