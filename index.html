@@ -5,19 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Imminent Support</title>
 <style>
-  :root { --bg: #fdf7fb; --fg: #1d1b26; --muted: #6b6878; --accent: #c2338a; --card: #fff; }
-  @media (prefers-color-scheme: dark) { :root { --bg: #15131b; --fg: #f2f0f7; --muted: #a9a5b6; --accent: #ff7ab8; --card: #211e2a; } }
+  :root { --bg: #fdf7fb; --fg: #1d1b26; --muted: #6b6878; --accent: #c2338a; --card: #fff; --chip: #f4e6ef; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #15131b; --fg: #f2f0f7; --muted: #a9a5b6; --accent: #ff7ab8; --card: #211e2a; --chip: #2c2636; } }
+  html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
   main { max-width: 680px; margin: 0 auto; padding: 40px 16px 64px; }
   h1 { font-size: 30px; margin: 0 0 4px; }
-  h2 { font-size: 20px; margin: 32px 0 8px; }
+  h2 { font-size: 22px; margin: 40px 0 8px; }
+  h3 { font-size: 17px; margin: 28px 0 6px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; scroll-margin-top: 16px; }
   .muted { color: var(--muted); }
   .card { background: var(--card); border-radius: 16px; padding: 16px 20px; margin: 20px 0; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
   details { background: var(--card); border-radius: 12px; padding: 12px 16px; margin: 10px 0; }
   summary { font-weight: 600; cursor: pointer; }
+  details p, details ul { margin: 10px 0 4px; }
   a { color: var(--accent); }
   ul { padding-left: 22px; }
   li { margin: 6px 0; }
+  nav.topics { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+  nav.topics a { background: var(--chip); border-radius: 999px; padding: 4px 12px; font-size: 15px; text-decoration: none; }
+  .release summary .date { font-weight: 400; color: var(--muted); margin-left: 6px; }
 </style>
 </head>
 <body>
@@ -27,15 +33,53 @@
 
   <div class="card">Need help or have an idea? In Imminent, tap <strong>? → Contact Support</strong>, which fills in your device and version for you. Or email <a href="mailto:imminent.app.help@gmail.com">imminent.app.help@gmail.com</a> and include your iPhone or iPad model and the version shown at the bottom of the app's list.</div>
 
-  <h2>New in 1.4</h2>
+  <h2>New in 1.5</h2>
   <ul>
-    <li><strong>Repeats like Calendar's:</strong> every weekday, the 1st and 15th, the last Friday of the month, or the fourth Thursday of November, with an end date if it stops.</li>
-    <li><strong>iPad and Mac:</strong> a sidebar for your categories, your countdowns in a grid, and the one you pick open alongside them, plus search and keyboard shortcuts.</li>
-    <li><strong>Bigger widgets</strong> with up to seven countdowns.</li>
-    <li><strong>What's New</strong> and <strong>Contact Support</strong> in the app, under the ? button.</li>
+    <li><strong>Scan for Countdowns:</strong> tap <strong>+ → Scan to Add</strong> and take a photo of a poster, bill, invitation, syllabus, or game schedule, or choose a photo or PDF. Imminent finds the dates for you.</li>
+    <li><strong>Every date on the page:</strong> a syllabus or a season of games lists each date. Tick the ones you want, set a category or emoji for all of them at once, and add them together, to Calendar too if you like.</li>
+    <li><strong>Share a picture or PDF</strong> to Imminent from Photos, Mail, Files, or Safari.</li>
+    <li><strong>Private by design:</strong> pictures and files are read right on your device. They're never saved, and never sent anywhere.</li>
   </ul>
 
   <h2>Common questions</h2>
+  <nav class="topics">
+    <a href="#scanning">Scanning</a>
+    <a href="#adding">Adding countdowns</a>
+    <a href="#calendar">Calendar</a>
+    <a href="#repeats">Repeats &amp; Days Since</a>
+    <a href="#widgets">Widgets, Watch &amp; Lock Screen</a>
+    <a href="#devices">Devices, sync &amp; sharing</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+
+  <h3 id="scanning">Scanning pictures and PDFs</h3>
+
+  <details><summary>What can Scan for Countdowns read?</summary>
+  <p>Anything printed with a date on it: posters and flyers, invitations, bills, class syllabi, game and practice schedules, appointment cards, and screenshots of emails or web pages. Tap <strong>+ → Scan to Add</strong>, then:</p>
+  <ul>
+    <li><strong>Take Photo</strong> finds the edges of the page and flattens it. You can take several pages, like a long syllabus.</li>
+    <li><strong>Choose Photo</strong> reads up to 5 pictures or screenshots from your library.</li>
+    <li><strong>Choose File</strong> reads a PDF or picture from Files, iCloud Drive, or other storage apps.</li>
+  </ul>
+  <p>Imminent reads times, the due date on a bill, a practice that repeats until the season ends, and "for 10 days" on a medicine label (as a countdown to the last day). You always check the details before anything is added. Printed text works best; handwriting may not be read.</p></details>
+
+  <details><summary>Are my pictures and files uploaded anywhere?</summary>
+  <p>No. Pictures and files are read right on your device with Apple's built-in text recognition. They're never saved by Imminent, and never sent to us or anyone else. On devices with Apple Intelligence, Apple's on-device model may suggest better names for the events; that happens on your device too.</p></details>
+
+  <details><summary>How do I add a whole schedule at once?</summary>
+  <p>When a page has several dates, Imminent lists them all. Upcoming ones are ticked; past ones aren't. Under <strong>Change Selected</strong>, use <strong>Set Category</strong> or <strong>Set Emoji</strong> to change every ticked event at once. Tap an event to change just that one. Turn on <strong>Also Add to Calendar</strong> if you want them in Calendar too, then tap <strong>Add</strong>.</p></details>
+
+  <details><summary>Why did it say "No Upcoming Events"?</summary>
+  <p>The page had dates, but none were things coming up: the date a letter was written or an email was sent, a printed or order date, or a date of birth. Imminent lists each date it left out and why. If one of them is what you wanted, tap <strong>Use Anyway</strong>. "No Dates Found" means there were no dates at all; try again with the whole page in view, flat, and in good light.</p></details>
+
+  <details><summary>It got a date or name wrong.</summary>
+  <p>Tap the event before adding it to fix the name, date, time, category, or emoji. A sharper, straighter photo helps, and so does Take Photo, which flattens the page. If a page keeps reading wrong, send it to us with <strong>? → Contact Support</strong> so we can improve it.</p></details>
+
+  <details><summary>Can I choose a file from Google Drive or OneDrive?</summary>
+  <p>Yes. In <strong>Scan for Countdowns</strong>, tap <strong>Choose File</strong>, then <strong>Browse</strong> at the bottom. If Google Drive or OneDrive isn't listed under Locations, tap <strong>⋯</strong> (top right) → <strong>Edit</strong>, turn it on, and tap <strong>Done</strong>. It then shows up whenever you choose a file, in any app.</p>
+  <p>The Google Drive or OneDrive app needs to be installed and signed in. If it isn't listed under Edit, open that app once, then try again. You can also share a PDF or picture straight from those apps: tap Share (or Open In), then <strong>Imminent</strong>.</p></details>
+
+  <h3 id="adding">Adding countdowns</h3>
 
   <details><summary>How do I add a countdown from a text message?</summary>
   <p>Copy the message, then in Imminent tap <strong>+ → New Countdown → Paste</strong>. You can also select text in most apps and tap <strong>Share → Imminent</strong>.</p></details>
@@ -43,29 +87,10 @@
   <details><summary>What can I say to Siri?</summary>
   <p>"<strong>Add an event to Imminent</strong>" — Siri asks what it is and when, like "Mom's birthday May 10" or "Concert Friday at 8pm". To hear what's next: "<strong>What's next in Imminent</strong>". For short timers like 20 minutes, use the built-in Clock timer.</p></details>
 
-  <details><summary>How do I make a countdown repeat every weekday, or on the last Friday of the month?</summary>
-  <p>In the countdown, tap <strong>Repeats</strong>. Every Day, Every Weekday, Every Week, Every 2 Weeks, Every Month, and Every Year are right there. For anything else, choose <strong>Custom</strong>: pick days of the week, dates of the month (like the 1st and 15th), a position (like the last Friday or the first weekday), or months of the year (like the fourth Thursday of November). Turn on <strong>End Repeat</strong> to stop on a certain day; after that, the countdown moves to Past.</p></details>
-
-  <details><summary>How do I add the widget?</summary>
-  <p>Touch and hold the Home Screen, tap <strong>Edit → Add Widget</strong>, and choose Imminent. Countdowns and Favorites come in small, medium, and large sizes (and extra large on iPad). To pick which countdown a widget shows, touch and hold it and tap <strong>Edit Widget</strong>. For the Lock Screen, touch and hold the Lock Screen and tap <strong>Customize</strong>.</p></details>
-
-  <details><summary>How do my countdowns get to my other devices?</summary>
-  <p>Through your own iCloud account. Make sure you're signed in to the same Apple Account on each device, and that Imminent is allowed to use iCloud in <strong>Settings → [your name] → iCloud</strong>, under the apps using iCloud. The bottom of the list shows when Imminent last synced, or what's wrong if it can't. Changes can take a minute to appear. Your Apple Watch gets its countdowns from your iPhone.</p></details>
-
-  <details><summary>Does Imminent work on iPad and Mac?</summary>
-  <p>Yes, with the same purchase. On iPad (and on Mac computers with Apple silicon), Imminent shows a sidebar of your categories, your countdowns in a grid, and the one you tap open alongside them. Use the search field to find a countdown by name, and <strong>⌘N</strong> to add one with a keyboard. In Split View or Slide Over, it switches to the iPhone layout.</p></details>
-
   <details><summary>How do I add holidays?</summary>
   <p>Tap <strong>+ → Add Holidays</strong> to add the next year of holidays from your device's holidays calendar. Holidays you already have are skipped, and each one moves to next year's date on its own. If the list is empty, turn on the holidays calendar in the Calendar app.</p></details>
 
-  <details><summary>How do I share a countdown with a friend?</summary>
-  <p>Touch and hold a countdown and tap <strong>Share</strong>. Your friend gets a link that ticks down live, with Add to Calendar. If they have Imminent, the link opens right in the app so they can add it.</p></details>
-
-  <details><summary>Why doesn't a countdown show on my watch or widget?</summary>
-  <p>Countdowns marked <strong>Private</strong> are kept off widgets, the watch, and Siri on purpose. Turn off Private in the countdown to show it everywhere. For the watch, open Imminent on your iPhone once so it can sync.</p></details>
-
-  <details><summary>How do private countdowns unlock?</summary>
-  <p>Tap a locked card or the lock at the top of the list and use Face ID or your passcode. They lock again whenever you leave the app.</p></details>
+  <h3 id="calendar">Calendar</h3>
 
   <details><summary>An imported calendar event moved — will my countdown update?</summary>
   <p>Yes. Countdowns imported from a one-time calendar event follow it if it moves, is renamed, or is deleted. Use <strong>Edit in Calendar</strong> in the countdown to change the date. Repeating events come in with the same repeat, like every weekday, but stay put if you later change the event in Calendar.</p></details>
@@ -75,14 +100,97 @@
   <p>To add it, go to <strong>Settings → Apps → Calendar → Calendar Accounts → Add Account</strong>. Choose <strong>Microsoft Exchange</strong> for a work or school account, or <strong>Outlook.com</strong> for a personal one. Once its events show in Calendar, use <strong>+ → Import from Calendar</strong> in Imminent.</p>
   <p>Many workplaces allow their calendar only in the Outlook app. If adding the account is blocked or asks you to use Outlook, Imminent can't read that calendar. You can still add those events to Imminent yourself.</p></details>
 
+  <h3 id="repeats">Repeats and Days Since</h3>
+
+  <details><summary>How do I make a countdown repeat every weekday, or on the last Friday of the month?</summary>
+  <p>In the countdown, tap <strong>Repeats</strong>. Every Day, Every Weekday, Every Week, Every 2 Weeks, Every Month, and Every Year are right there. For anything else, choose <strong>Custom</strong>: pick days of the week, dates of the month (like the 1st and 15th), a position (like the last Friday or the first weekday), or months of the year (like the fourth Thursday of November). Turn on <strong>End Repeat</strong> to stop on a certain day; after that, the countdown moves to Past.</p></details>
+
   <details><summary>How do I count up from something, like quitting smoking?</summary>
   <p>Add a countdown with the start date and turn on <strong>Count Up (Days Since)</strong>, or choose the Milestone category. Imminent lets you know on day 100, 200, 500, and 1,000, and on each anniversary; turn that off with Milestone Alerts.</p></details>
+
+  <h3 id="widgets">Widgets, Watch, and Lock Screen</h3>
+
+  <details><summary>How do I add the widget?</summary>
+  <p>Touch and hold the Home Screen, tap <strong>Edit → Add Widget</strong>, and choose Imminent. Countdowns and Favorites come in small, medium, and large sizes (and extra large on iPad). To pick which countdown a widget shows, touch and hold it and tap <strong>Edit Widget</strong>. For the Lock Screen, touch and hold the Lock Screen and tap <strong>Customize</strong>.</p></details>
+
+  <details><summary>Why doesn't a countdown show on my watch or widget?</summary>
+  <p>Countdowns marked <strong>Private</strong> are kept off widgets, the watch, and Siri on purpose. Turn off Private in the countdown to show it everywhere. For the watch, open Imminent on your iPhone once so it can sync.</p></details>
 
   <details><summary>The Live Activity didn't appear.</summary>
   <p>Live Activities appear for timed countdowns in their final 8 hours. Check that they're allowed in <strong>Settings → Imminent → Live Activities</strong>, and that the countdown's Live Activity switch is on.</p></details>
 
-  <h2>Privacy</h2>
-  <p>Imminent collects no data — see the <a href="privacy.html">Privacy Policy</a>.</p>
+  <h3 id="devices">Devices, sync, and sharing</h3>
+
+  <details><summary>How do my countdowns get to my other devices?</summary>
+  <p>Through your own iCloud account. Make sure you're signed in to the same Apple Account on each device, and that Imminent is allowed to use iCloud in <strong>Settings → [your name] → iCloud</strong>, under the apps using iCloud. The bottom of the list shows when Imminent last synced, or what's wrong if it can't. Changes can take a minute to appear. Your Apple Watch gets its countdowns from your iPhone.</p></details>
+
+  <details><summary>Does Imminent work on iPad and Mac?</summary>
+  <p>Yes, with the same purchase. On iPad (and on Mac computers with Apple silicon), Imminent shows a sidebar of your categories, your countdowns in a grid, and the one you tap open alongside them. Use the search field to find a countdown by name, and <strong>⌘N</strong> to add one with a keyboard. In Split View or Slide Over, it switches to the iPhone layout.</p></details>
+
+  <details><summary>How do I share a countdown with a friend?</summary>
+  <p>Touch and hold a countdown and tap <strong>Share</strong>. Your friend gets a link that ticks down live, with Add to Calendar. If they have Imminent, the link opens right in the app so they can add it.</p></details>
+
+  <details><summary>I updated, but I don't see the new version.</summary>
+  <p>Open the App Store, tap your picture at the top right, and pull down on that screen to refresh the list of updates. To have apps update on their own, turn on <strong>Settings → Apps → App Store → App Updates</strong>. The version you have is shown at the bottom of Imminent's list.</p></details>
+
+  <h3 id="privacy">Privacy</h3>
+
+  <details><summary>How do private countdowns unlock?</summary>
+  <p>Tap a locked card or the lock at the top of the list and use Face ID or your passcode. They lock again whenever you leave the app.</p></details>
+
+  <details><summary>What does Imminent collect?</summary>
+  <p>Nothing. There's no account, no ads, and no tracking. Your countdowns stay on your devices and in your own iCloud, and pictures and files you scan are read on your device and never kept. See the <a href="privacy.html">Privacy Policy</a>.</p></details>
+
+  <h2>Previous updates</h2>
+
+  <details class="release"><summary>1.4 <span class="date">November 22, 2026</span></summary>
+  <ul>
+    <li><strong>Repeats like Calendar's:</strong> choose Repeat, then Custom, for a countdown every weekday, on the 1st and 15th, on the last Friday of the month, or on the fourth Thursday of November. Any repeat can have an end date, and countdowns imported from Calendar keep these repeats too.</li>
+    <li><strong>iPad and Mac:</strong> a sidebar for your categories, your countdowns in a grid, and the one you pick open alongside them, with search, keyboard shortcuts, and bigger widgets with up to seven countdowns.</li>
+    <li><strong>What's New</strong> after each update, any time from the ? button.</li>
+    <li><strong>Contact Support:</strong> tap ?, then Contact Support. Your version and device are filled in for you.</li>
+  </ul></details>
+
+  <details class="release"><summary>1.3 <span class="date">November 18, 2026</span></summary>
+  <ul>
+    <li><strong>iCloud sync:</strong> your countdowns and your own categories sync through your iCloud account, so they show up on your other devices and come back on a new iPhone. The bottom of the list shows when Imminent last synced.</li>
+    <li><strong>Shared countdowns open in Imminent:</strong> tap a countdown link from a friend and it opens right in the app, with Add.</li>
+  </ul></details>
+
+  <details class="release"><summary>1.2 <span class="date">November 15, 2026</span></summary>
+  <ul>
+    <li><strong>Holidays:</strong> add the next year of holidays at once from your device's holidays calendar. Each one moves to next year's date on its own.</li>
+    <li><strong>Widgets you choose:</strong> a Countdown widget for the one countdown you pick, and a Favorites widget for your starred ones.</li>
+    <li><strong>Days Since milestones:</strong> a notification on day 100, 200, 500, and 1,000, and on each anniversary.</li>
+    <li><strong>Share a countdown</strong> in Messages, with a link that ticks down live and has Add to Calendar.</li>
+    <li>Import from Calendar skips events you've already made by hand.</li>
+  </ul></details>
+
+  <details class="release"><summary>1.1 <span class="date">November 11, 2026</span></summary>
+  <ul>
+    <li><strong>Favorites</strong> stay at the top of the list, whatever their date.</li>
+    <li><strong>Your own categories</strong> with any name, emoji, and color, and filters for the categories you use.</li>
+    <li><strong>Repeats</strong> every week, month, year, or every few days, and <strong>Mark Done</strong>: a monthly bill moves on to next month, and bills and tasks show Overdue if their date slips by.</li>
+    <li><strong>Days Since:</strong> count up from a milestone.</li>
+    <li><strong>Time left:</strong> calendar events with an end time count down until they're over.</li>
+    <li>A welcome tour, and How to Use Imminent any time from the ? button.</li>
+  </ul></details>
+
+  <details class="release"><summary>1.0.2 <span class="date">November 9, 2026</span></summary>
+  <ul>
+    <li>Finished countdowns leave your Lock Screen on their own: the Live Activity shows "Now!" and clears about an hour later.</li>
+  </ul></details>
+
+  <details class="release"><summary>1.0.1 <span class="date">November 7, 2026</span></summary>
+  <ul>
+    <li>Countdowns imported from Calendar follow the event when it's renamed or deleted, and pick up changes while the app is open.</li>
+    <li>Choosing an emoji shows it right away beside the emoji field.</li>
+  </ul></details>
+
+  <details class="release"><summary>1.0 <span class="date">November 4, 2026</span></summary>
+  <ul>
+    <li>Imminent arrives on the App Store: countdowns for trips, birthdays, bills, and big days, with widgets, Live Activities, Siri, and Apple Watch.</li>
+  </ul></details>
 </main>
 </body>
 </html>
